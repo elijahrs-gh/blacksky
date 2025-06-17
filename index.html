@@ -6,7 +6,7 @@
     <title>Blacksky</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,7 +15,7 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: #0f1419;
             color: white;
             min-height: 100vh;
@@ -23,9 +23,33 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f1419;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #374151 #0f1419;
+        }
+
         .container {
             display: flex;
             min-height: 100vh;
+            overflow: hidden;
         }
 
         .sidebar {
@@ -82,9 +106,9 @@
             left: 4rem;
             top: 0;
             width: 0;
-            height: 100%;
+            height: 100vh;
             background-color: #16181c;
-            border-right: 1px solid #272b30;
+            border-right: 1px solid #374151;
             transition: width 0.3s ease;
             overflow: hidden;
             z-index: 20;
@@ -92,11 +116,33 @@
 
         .search-panel.active {
             width: 300px;
-        }
+        }   
 
         .search-container {
             padding: 1rem;
             width: 300px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .search-results {
+            margin-top: 1rem;
+            overflow-y: auto;
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            height: calc(100vh - 5rem);
+        }
+
+        .search-results.active {
+            display: flex;
+        }
+
+        .search-results .post-card {
+            background-color: #1f2937;
         }
 
         .search-input-container {
@@ -123,7 +169,7 @@
             display: inline-block;
             min-width: 1px;
             color: white;
-            font-size: 1.125rem;
+            font-size: 1.25rem;
             margin-left: 0;
             white-space: pre;
         }
@@ -142,7 +188,7 @@
             position: absolute;
             color: #6b7280;
             pointer-events: none;
-            font-size: 1.125rem;
+            font-size: 1.25rem;
             opacity: 0.5;
         }
 
@@ -158,13 +204,96 @@
         .main-content {
             flex: 1;
             margin-left: 4rem;
+            margin-right: 600px;
             display: flex;
             flex-direction: column;
-            transition: margin-left 0.3s ease;
+            transition: margin-left 0.3s ease, margin-right 0.3s ease;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .main-content.comments-active {
+            margin-right: 0;
+        }
+
+        .feeds-container {
+            display: flex;
+            flex: 1;
+            margin-top: 3rem;
+            height: calc(100vh - 3rem);
+            transition: transform 0.3s ease;
+        }
+
+        .feeds-container.comments-active {
+            transform: none;
+        }
+
+        .feed {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            overflow-y: auto;
+            flex: 1;
+            height: 100%;
+            align-items: flex-start;
+            border-right: 1px solid #374151;
+            transition: transform 0.3s ease, border-right 0.3s ease;
+        }
+
+        .feed:last-child {
+            border-right: none;
+        }
+
+        .feed:last-child.comments-active {
+            transform: translateX(385px);
+            opacity: 1;
+            visibility: visible;
+            width: calc(100% - 385px);
+        }
+
+        .feed:last-child.comments-active .post-card {
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .feed:last-child.comments-active .post-card-actions {
+            gap: 0.5rem;
+            margin-left: 2.75rem;
+        }
+
+        .feed:last-child.comments-active .action {
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .feed:first-child.comments-active {
+            border-right: none;
         }
 
         .main-content.search-active {
             margin-left: 360px;
+        }
+
+        .main-content.create-post-active {
+            margin-left: 360px;
+        }
+
+        .right-sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 600px;
+            height: 100vh;
+            background-color: #16181c;
+            border-left: 1px solid #374151;
+            z-index: 20;
+        }
+
+        .right-sidebar-content {
+            padding: 1rem;
+            height: 100%;
+            overflow-y: auto;
         }
 
         .top-bar {
@@ -175,30 +304,29 @@
             background-color: #16181c;
             border-bottom: 2px solid #374151;
             position: fixed;
-            width: calc(100% - 4rem);
+            width: calc(100% - 604px);
+            z-index: 10;
+            transition: width 0.3s ease;
         }
 
-        .feed {
-            margin-top: 3rem;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            overflow-y: auto;
-            flex: 1;
+        .main-content.comments-active .top-bar {
+            width: calc(100% - 4rem);
         }
 
         .post-card {
             background-color: #16181c;
             border-radius: 0.5rem;
-            padding: 1rem;
+            padding: 0.75rem 1rem;
+            max-width: 830px;
+            margin: 0;
+            width: 100%;
         }
 
         .post-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 0.75rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
 
         .avatar {
@@ -217,36 +345,81 @@
         .post-info {
             display: flex;
             flex-direction: column;
+            flex: 1;
+            margin-top: 0;
         }
 
         .author {
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .username {
+            font-size: 1rem;
+            color: #6b7280;
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            line-height: 1;
         }
 
         .timestamp {
-            font-size: 0.875rem;
+            font-size: 1rem;
             color: #6b7280;
         }
 
-        .post-content {
-            margin-bottom: 0.5rem;
+        .dot-separator {
+            color: #6b7280;
+            font-size: 1rem;
         }
 
-        .post-actions {
+        .post-card-actions {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
             color: #9ca3af;
+            margin-top: 0.5rem;
+            justify-content: flex-start;
+            margin-left: 3.25rem;
         }
 
         .action {
             display: flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
             cursor: pointer;
+            font-size: 1rem;
+            padding: 0.5rem 0.75rem;
+            background-color: #1f2937;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
         }
 
         .action:hover {
             color: white;
+            background-color: #374151;
+        }
+
+        .action.liked {
+            color: #ef4444;
+            background-color: #1f2937;
+        }
+
+        .action.liked:hover {
+            background-color: #374151;
+        }
+
+        .action.liked svg {
+            fill: currentColor;
+        }
+
+        .action-count {
+            font-weight: 500;
         }
 
         .icon {
@@ -277,7 +450,7 @@
         }
 
         .create-post-header {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
             color: white;
@@ -296,7 +469,7 @@
             border: 2px solid #374151;
             border-radius: 0.5rem;
             color: white;
-            font-size: 1rem;
+            font-size: 1.125rem;
             padding: 1rem;
             resize: none;
             outline: none;
@@ -307,7 +480,7 @@
             border-color: #4b5563;
         }
 
-        .post-actions {
+        .post-card-actions {
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
@@ -347,6 +520,7 @@
             font-weight: 600;
             color: white;
             letter-spacing: 0.05em;
+            font-size: 1.5rem;
         }
 
         .post-actions-row {
@@ -383,6 +557,131 @@
         .action-button svg {
             width: 1.25rem;
             height: 1.25rem;
+        }
+
+        .post-content {
+            margin-bottom: 0.5rem;
+            margin-left: 3.25rem;
+            margin-top: -0.25rem;
+            line-height: 1.3;
+            position: relative;
+            font-size: 1.125rem;
+            padding-right: 1rem;
+        }
+
+        .post-card-actions {
+            margin-top: 0.5rem;
+            margin-left: 3.25rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-start;
+        }
+
+        .comments-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 600px;
+            height: 100vh;
+            background-color: #16181c;
+            border-left: 1px solid #374151;
+            border-right: 1px solid #374151;
+            z-index: 20;
+            transform: none;
+            transition: transform 0.3s ease, right 0.3s ease;
+        }
+
+        .comments-panel.active {
+            transform: translateX(-725px);
+        }
+
+        .comments-header {
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            border-bottom: 2px solid #374151;
+            background-color: #16181c;
+        }
+
+        .comments-header h2 {
+            font-weight: 600;
+            color: white;
+            letter-spacing: 0.05em;
+            font-size: 1.25rem;
+        }
+
+        .comments-container {
+            padding: 1rem;
+            height: calc(100vh - 3rem);
+            overflow-y: auto;
+        }
+
+        .comment-card {
+            background-color: #1f2937;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .comment-content {
+            margin-left: 3.25rem;
+            line-height: 1.3;
+            font-size: 1rem;
+        }
+
+        .comment-input-container {
+            padding: 1rem;
+            border-bottom: 1px solid #374151;
+            background-color: #16181c;
+        }
+
+        .comment-input {
+            width: 100%;
+            min-height: 80px;
+            background-color: #1f2937;
+            border: 2px solid #374151;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+            padding: 0.75rem;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            margin-bottom: 0.75rem;
+        }
+
+        .comment-input:focus {
+            border-color: #4b5563;
+        }
+
+        .comment-submit-button {
+            padding: 0.5rem 1rem;
+            background-color: #374151;
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .comment-submit-button:hover {
+            background-color: #4b5563;
+        }
+
+        .comments-container {
+            padding: 1rem;
+            height: calc(100vh - 8rem);
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -436,6 +735,7 @@
                     <span class="cursor" id="searchCursor"></span>
                     <input type="text" class="search-input" id="searchInput" aria-label="Search posts">
                 </div>
+                <div class="search-results" id="searchResults"></div>
             </div>
         </div>
 
@@ -451,25 +751,25 @@
                 </div>
                 <div class="post-actions-row">
                     <button class="action-button" id="imageButton">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              </svg>          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         Image
                     </button>
                     <button class="action-button" id="emojiButton">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              </svg>          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        Emoji
+                        Em</button>oji
                     </button>
                     <button class="action-button" id="scheduleButton">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              </svg>          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         Schedule
                     </button>
                     <button class="action-button" id="pollButton">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              </svg>          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                         Poll
@@ -483,8 +783,25 @@
                 <h1 class="font-semibold text-lg">Home</h1>
             </nav>
 
-            <main class="feed">
-            </main>
+            <div class="feeds-container">
+                <main class="feed" id="feed1">
+                </main>
+                <main class="feed" id="feed2">
+                </main>
+            </div>
+        </div>
+
+        <div class="right-sidebar">
+            <div class="right-sidebar-content">
+            </div>
+        </div>
+
+        <div class="comments-panel">
+            <div class="comments-header">
+                <h2>Comments</h2>
+            </div>
+            <div class="comments-container">
+            </div>
         </div>
     </div>
 
@@ -493,16 +810,114 @@
             {
                 id: 1,
                 author: "Alice",
-                avatarUrl: "https://i.pravatar.cc/150?u=Bob",
-                content: "Example Post 1!",
-                timestamp: "2h"
+                username: "alice",
+                avatarUrl: "https://i.pravatar.cc/150?u=Alice",
+                content: "Hello from Blacksky!",
+                timestamp: "2h",
+                likes: 0,
+                liked: false,
+                comments: 2,
+                reposts: 1,
+                commentsList: [
+                    {
+                        id: 1,
+                        author: "Bob",
+                        username: "bob",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Bob",
+                        content: "Welcome to the platform!",
+                        timestamp: "1h"
+                    },
+                    {
+                        id: 2,
+                        author: "Charlie",
+                        username: "charlie",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Charlie",
+                        content: "Great to see you here!",
+                        timestamp: "45m"
+                    }
+                ]
             },
             {
                 id: 2,
                 author: "Bob",
-                avatarUrl: "https://i.pravatar.cc/150?u=Alice",
-                content: "Second post :) Hint: ( Try using the search function to search through these posts. )",
-                timestamp: "1h"
+                username: "bob",
+                avatarUrl: "https://i.pravatar.cc/150?u=Bob",
+                content: "Second post :)",
+                timestamp: "1h",
+                likes: 5,
+                liked: false,
+                comments: 3,
+                reposts: 2,
+                commentsList: [
+                    {
+                        id: 3,
+                        author: "Charlie",
+                        username: "charlie",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Charlie",
+                        content: "I agree, it's a great post!",
+                        timestamp: "45m"
+                    },
+                    {
+                        id: 4,
+                        author: "Diana",
+                        username: "diana",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Diana",
+                        content: "I love the way you express yourself!",
+                        timestamp: "30m"
+                    }
+                ]
+            },
+            {
+                id: 3,
+                author: "Charlie",
+                username: "charlie",
+                avatarUrl: "https://i.pravatar.cc/150?u=Charlie",
+                content: "Just discovered this amazing platform!",
+                timestamp: "45m",
+                likes: 3,
+                liked: false,
+                comments: 1,
+                reposts: 0,
+                commentsList: [
+                    {
+                        id: 5,
+                        author: "Alice",
+                        username: "alice",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Alice",
+                        content: "Thanks for sharing!",
+                        timestamp: "2h"
+                    }
+                ]
+            },
+            {
+                id: 4,
+                author: "Diana",
+                username: "diana",
+                avatarUrl: "https://i.pravatar.cc/150?u=Diana",
+                content: "Working on some exciting new features...",
+                timestamp: "30m",
+                likes: 7,
+                liked: false,
+                comments: 4,
+                reposts: 2,
+                commentsList: [
+                    {
+                        id: 6,
+                        author: "Bob",
+                        username: "bob",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Bob",
+                        content: "Looking forward to seeing the new features!",
+                        timestamp: "1h"
+                    },
+                    {
+                        id: 7,
+                        author: "Charlie",
+                        username: "charlie",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Charlie",
+                        content: "I'm excited too!",
+                        timestamp: "45m"
+                    }
+                ]
             }
         ];
 
@@ -514,28 +929,187 @@
                             <img src="${post.avatarUrl}" alt="${post.author}">
                         </div>
                         <div class="post-info">
-                            <span class="author">${post.author}</span>
-                            <span class="timestamp">${post.timestamp}</span>
+                            <div class="author">
+                                ${post.author}
+                                <span class="username">
+                                    @${post.username}
+                                    <span class="dot-separator">·</span>
+                                    <span class="timestamp">${post.timestamp}</span>
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div class="post-content">
                         ${post.content}
                     </div>
-                    <div class="post-actions">
+                    <div class="post-card-actions">
                         <div class="action">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>
-                            <span>${post.id === 2 ? 5 : 0}</span>
+                            <span class="action-count">${post.comments || 0}</span>
                         </div>
                         <div class="action">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 16v-2a4 4 0 00-3-3.87M5 8V6a4 4 0 014-4h6a4 4 0 014 4v2" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
+                            <span class="action-count">${post.reposts || 0}</span>
+                        </div>
+                        <div class="action like-button ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="${post.liked ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                            <span class="action-count">${post.likes}</span>
                         </div>
                     </div>
                 </div>
             `;
+        }
+
+        const commentInputSection = `
+            <div class="comment-input-container">
+                <textarea class="comment-input" placeholder="Write a comment..."></textarea>
+                <button class="comment-submit-button">Comment</button>
+            </div>
+        `;
+
+        function createCommentCard(comment) {
+            return `
+                <div class="comment-card">
+                    <div class="comment-header">
+                        <div class="avatar">
+                            <img src="${comment.avatarUrl}" alt="${comment.author}">
+                        </div>
+                        <div class="post-info">
+                            <div class="author">
+                                ${comment.author}
+                                <span class="username">
+                                    @${comment.username}
+                                    <span class="dot-separator">·</span>
+                                    <span class="timestamp">${comment.timestamp}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment-content">
+                        ${comment.content}
+                    </div>
+                </div>
+            `;
+        }
+
+        function showComments(post, isFromFirstColumn) {
+            const mainContent = document.getElementById('mainContent');
+            const feedsContainer = document.querySelector('.feeds-container');
+            const rightSidebar = document.querySelector('.right-sidebar');
+            const rightSidebarContent = document.querySelector('.right-sidebar-content');
+            const commentsPanel = document.querySelector('.comments-panel');
+            const panelCommentsContainer = commentsPanel.querySelector('.comments-container');
+            
+            panelCommentsContainer.innerHTML = '';
+            rightSidebarContent.innerHTML = '';
+            
+            const commentsHeader = document.querySelector('.comments-header h2');
+            const secondFeed = document.querySelector('#feed2');
+            const firstFeed = document.querySelector('#feed1');
+
+            commentsHeader.textContent = `Comments on ${post.author}'s post`;
+
+            commentsPanel.dataset.currentPostId = post.id;
+            rightSidebarContent.dataset.currentPostId = post.id;
+
+            if (isFromFirstColumn) {
+                rightSidebar.style.display = 'none';
+                rightSidebar.style.opacity = '0';
+                rightSidebar.style.visibility = 'hidden';
+                mainContent.classList.add('comments-active');
+                feedsContainer.classList.add('comments-active');
+                secondFeed.classList.add('comments-active');
+                firstFeed.classList.add('comments-active');
+                commentsPanel.classList.add('active');
+                
+                panelCommentsContainer.innerHTML = commentInputSection;
+                
+                if (post.commentsList && post.commentsList.length > 0) {
+                    post.commentsList.forEach(comment => {
+                        panelCommentsContainer.insertAdjacentHTML('beforeend', createCommentCard(comment));
+                    });
+                }
+                
+                const commentButton = panelCommentsContainer.querySelector('.comment-submit-button');
+                const commentInput = panelCommentsContainer.querySelector('.comment-input');
+                
+                if (commentButton && commentInput) {
+                    commentButton.addEventListener('click', () => {
+                        addComment(post, commentInput, isFromFirstColumn);
+                    });
+                }
+            } else {
+                rightSidebar.style.display = 'block';
+                rightSidebar.style.opacity = '1';
+                rightSidebar.style.visibility = 'visible';
+                mainContent.classList.remove('comments-active');
+                feedsContainer.classList.remove('comments-active');
+                secondFeed.classList.remove('comments-active');
+                firstFeed.classList.remove('comments-active');
+                commentsPanel.classList.remove('active');
+                
+                rightSidebarContent.insertAdjacentHTML('beforeend', commentInputSection);
+                
+                const sidebarCommentsContainer = document.createElement('div');
+                sidebarCommentsContainer.className = 'comments-container';
+                
+                if (post.commentsList && post.commentsList.length > 0) {
+                    post.commentsList.forEach(comment => {
+                        sidebarCommentsContainer.insertAdjacentHTML('beforeend', createCommentCard(comment));
+                    });
+                }
+                
+                rightSidebarContent.appendChild(sidebarCommentsContainer);
+                
+                const commentButton = rightSidebarContent.querySelector('.comment-submit-button');
+                const commentInput = rightSidebarContent.querySelector('.comment-input');
+                
+                if (commentButton && commentInput) {
+                    commentButton.addEventListener('click', () => {
+                        addComment(post, commentInput, isFromFirstColumn);
+                    });
+                }
+            }
+        }
+        
+        function addComment(post, commentInput, isFromFirstColumn) {
+            const content = commentInput.value.trim();
+            if (content) {
+                const newComment = {
+                    id: post.commentsList ? post.commentsList.length + 1 : 1,
+                    author: "You",
+                    username: "you",
+                    avatarUrl: "https://i.pravatar.cc/150?u=You",
+                    content: content,
+                    timestamp: "Just now"
+                };
+                
+                if (!post.commentsList) {
+                    post.commentsList = [];
+                }
+                
+                post.commentsList.unshift(newComment);
+                post.comments++;
+                
+                commentInput.value = '';
+                
+                showComments(post, isFromFirstColumn);
+                
+                const postCards = document.querySelectorAll(`.like-button[data-post-id="${post.id}"]`);
+                postCards.forEach(button => {
+                    const postCard = button.closest('.post-card');
+                    const commentCount = postCard.querySelector('.action:not(.like-button) .action-count');
+                    if (commentCount) {
+                        commentCount.textContent = post.comments;
+                    }
+                });
+            }
         }
 
         const searchButton = document.getElementById('searchButton');
@@ -563,17 +1137,23 @@
             searchText.textContent = value;
             searchPlaceholder.style.display = value ? 'none' : 'block';
             
-            const searchTerm = value.toLowerCase();
-            const filteredPosts = posts.filter(post => 
-                post.content.toLowerCase().includes(searchTerm) ||
-                post.author.toLowerCase().includes(searchTerm)
-            );
-            
-            const feed = document.querySelector('.feed');
-            feed.innerHTML = '';
-            filteredPosts.forEach(post => {
-                feed.innerHTML += createPostCard(post);
-            });
+            const searchResults = document.getElementById('searchResults');
+            if (value) {
+                searchResults.classList.add('active');
+                const searchTerm = value.toLowerCase();
+                const filteredPosts = posts.filter(post => 
+                    post.content.toLowerCase().includes(searchTerm) ||
+                    post.author.toLowerCase().includes(searchTerm)
+                );
+                
+                searchResults.innerHTML = '';
+                filteredPosts.forEach(post => {
+                    searchResults.innerHTML += createPostCard(post);
+                });
+            } else {
+                searchResults.classList.remove('active');
+                searchResults.innerHTML = '';
+            }
         });
 
         searchInput.addEventListener('focus', () => {
@@ -597,6 +1177,15 @@
             }
         });
 
+        searchContainer.addEventListener('click', () => {
+            if (!isSearchActive) {
+                isSearchActive = true;
+                searchPanel.classList.add('active');
+                mainContent.classList.add('search-active');
+            }
+            searchInput.focus();
+        });
+
         document.addEventListener('click', (e) => {
             if (isSearchActive && 
                 !searchPanel.contains(e.target) && 
@@ -604,6 +1193,15 @@
                 isSearchActive = false;
                 searchPanel.classList.remove('active');
                 mainContent.classList.remove('search-active');
+            }
+        });
+
+        searchPanel.addEventListener('click', (e) => {
+            if (!isSearchActive) {
+                isSearchActive = true;
+                searchPanel.classList.add('active');
+                mainContent.classList.add('search-active');
+                searchInput.focus();
             }
         });
 
@@ -639,9 +1237,14 @@
                 const newPost = {
                     id: posts.length + 1,
                     author: "You",
+                    username: "you",
                     avatarUrl: "https://i.pravatar.cc/150?u=You",
                     content: content,
-                    timestamp: "Just now"
+                    timestamp: "Just now",
+                    likes: 0,
+                    liked: false,
+                    comments: 0,
+                    reposts: 0
                 };
                 
                 posts.unshift(newPost);
@@ -670,9 +1273,15 @@
             }
         });
 
-        const feed = document.querySelector('.feed');
-        posts.forEach(post => {
-            feed.innerHTML += createPostCard(post);
+        const feed1 = document.getElementById('feed1');
+        const feed2 = document.getElementById('feed2');
+        
+        posts.forEach((post, index) => {
+            if (index % 2 === 0) {
+                feed1.innerHTML += createPostCard(post);
+            } else {
+                feed2.innerHTML += createPostCard(post);
+            }
         });
 
         const imageButton = document.getElementById('imageButton');
@@ -685,6 +1294,66 @@
                 button.classList.toggle('active');
             });
         });
+
+        document.addEventListener('click', (e) => {
+            const likeButton = e.target.closest('.like-button');
+            if (likeButton) {
+                const postId = parseInt(likeButton.dataset.postId);
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    post.liked = !post.liked;
+                    post.likes += post.liked ? 1 : -1;
+                    
+                    const feed1 = document.getElementById('feed1');
+                    const feed2 = document.getElementById('feed2');
+                    
+                    feed1.innerHTML = '';
+                    feed2.innerHTML = '';
+                    
+                    posts.forEach((post, index) => {
+                        if (index % 2 === 0) {
+                            feed1.innerHTML += createPostCard(post);
+                        } else {
+                            feed2.innerHTML += createPostCard(post);
+                        }
+                    });
+                    
+                    const searchResults = document.getElementById('searchResults');
+                    if (searchResults.classList.contains('active')) {
+                        searchResults.innerHTML = '';
+                        const searchTerm = searchInput.value.toLowerCase();
+                        const filteredPosts = posts.filter(post => 
+                            post.content.toLowerCase().includes(searchTerm) ||
+                            post.author.toLowerCase().includes(searchTerm)
+                        );
+                        filteredPosts.forEach(post => {
+                            searchResults.innerHTML += createPostCard(post);
+                        });
+                    }
+                }
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            const commentButton = e.target.closest('.action');
+            if (commentButton && !commentButton.classList.contains('like-button')) {
+                const postCard = commentButton.closest('.post-card');
+                if (postCard) {
+                    const likeButton = postCard.querySelector('.like-button');
+                    if (likeButton) {
+                        const postId = parseInt(likeButton.dataset.postId);
+                        const post = posts.find(p => p.id === postId);
+                        
+                        const feed1 = document.getElementById('feed1');
+                        const isFromFirstColumn = feed1.contains(postCard);
+                        
+                        if (post) {
+                            showComments(post, isFromFirstColumn);
+                        }
+                    }
+                }
+            }
+        });
     </script>
 </body>
-</html> 
+</html>
