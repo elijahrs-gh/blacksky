@@ -24,17 +24,19 @@
         }
 
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 12px;
         }
 
         ::-webkit-scrollbar-track {
             background: #0f1419;
+            border-radius: 0;
         }
 
         ::-webkit-scrollbar-thumb {
             background: #374151;
-            border-radius: 4px;
+            border-radius: 0;
             transition: background 0.3s;
+            border: 2px solid #0f1419;
         }
 
         ::-webkit-scrollbar-thumb:hover {
@@ -42,7 +44,7 @@
         }
 
         * {
-            scrollbar-width: thin;
+            scrollbar-width: auto;
             scrollbar-color: #374151 #0f1419;
         }
 
@@ -201,125 +203,138 @@
             }
         }
 
-        .main-content {
-            flex: 1;
-            margin-left: 4rem;
-            margin-right: 600px;
-            display: flex;
-            flex-direction: column;
-            transition: margin-left 0.3s ease, margin-right 0.3s ease;
-            height: 100vh;
-            overflow: hidden;
-        }
+            .main-content {
+                flex: 1;
+                margin-left: 4rem;
+                margin-right: 0;
+                display: flex;
+                flex-direction: column;
+                transition: margin-left 0.3s ease;
+                height: 100vh;
+                overflow-y: auto;
+                background-color: #0f1419;
+                position: relative;
+            }
 
-        .main-content.comments-active {
-            margin-right: 0;
-        }
+            .main-content.comments-active {
+                margin-right: 0;
+            }
 
-        .feeds-container {
-            display: flex;
-            flex: 1;
-            margin-top: 3rem;
-            height: calc(100vh - 3rem);
-            transition: transform 0.3s ease;
-        }
+            .feeds-container {
+                display: flex;
+                flex: 1;
+                margin-top: 3rem;
+                height: auto;
+                transition: transform 0.3s ease;
+                justify-content: center;
+                border-left: none;
+                border-right: none;
+                background-color: #0f1419;
+                padding: 0.5rem;
+            }
 
-        .feeds-container.comments-active {
-            transform: none;
-        }
+            .feeds-container.comments-active {
+                transform: none;
+            }
 
-        .feed {
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            overflow-y: auto;
-            flex: 1;
-            height: 100%;
-            align-items: flex-start;
-            border-right: 1px solid #374151;
-            transition: transform 0.3s ease, border-right 0.3s ease;
-        }
+            .feed {
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+                flex: 1;
+                max-width: 600px;
+                height: auto;
+                transition: transform 0.3s ease;
+                background-color: #16181c;
+                border-radius: 12px;
+                border: 1px solid #374151;
+                margin: 0.75rem;
+                overflow-y: visible;
+            }
 
-        .feed:last-child {
-            border-right: none;
-        }
+            .feed .post-card {
+                width: 100%;
+                border-radius: 0;
+                border: none;
+                border-bottom: 1px solid #2f3336;
+                margin: 0;
+                background-color: transparent;
+                padding: 1rem 1.25rem;
+                position: relative;
+                transition: background-color 0.2s ease;
+                box-shadow: none;
+            }
 
-        .feed:last-child.comments-active {
-            transform: translateX(385px);
-            opacity: 1;
-            visibility: visible;
-            width: calc(100% - 385px);
-        }
+            .feed .post-card:last-child {
+                border-bottom: none;
+            }
 
-        .feed:last-child.comments-active .post-card {
-            max-width: 100%;
-            width: 100%;
-        }
+            .feed .post-card:hover {
+                background-color: rgba(255, 255, 255, 0.03);
+                transform: none;
+            }
 
-        .feed:last-child.comments-active .post-card-actions {
-            gap: 0.5rem;
-            margin-left: 2.75rem;
-        }
+            .post-card {
+                background-color: transparent;
+                border-radius: 0;
+                padding: 1rem 1.25rem;
+                max-width: 100%;
+                margin: 0;
+                width: 100%;
+                transition: background-color 0.2s ease;
+                border: none;
+                box-shadow: none;
+            }
 
-        .feed:last-child.comments-active .action {
-            padding: 0.5rem;
-            font-size: 0.875rem;
-        }
+            .post-card:hover {
+                background-color: rgba(255, 255, 255, 0.03);
+                transform: none;
+            }
+            
+            .top-bar {
+                background-color: #16181c;
+                border-bottom: 2px solid #374151;
+                height: 4rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0 0 0.5rem 0;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                width: 100%;
+            }
 
-        .feed:first-child.comments-active {
-            border-right: none;
-        }
+            .top-bar h1 {
+                font-weight: 600;
+                color: white;
+                letter-spacing: 0.05em;
+                font-size: 1.25rem;
+                text-align: center;
+                padding-top: 0.45rem;
+            }
 
-        .main-content.search-active {
-            margin-left: 360px;
-        }
+            .right-sidebar {
+                display: none;
+            }
 
-        .main-content.create-post-active {
-            margin-left: 360px;
-        }
-
-        .right-sidebar {
-            position: fixed;
-            right: 0;
-            top: 0;
-            width: 600px;
-            height: 100vh;
-            background-color: #16181c;
-            border-left: 1px solid #374151;
-            z-index: 20;
-        }
-
-        .right-sidebar-content {
-            padding: 1rem;
-            height: 100%;
-            overflow-y: auto;
-        }
-
-        .top-bar {
-            height: 3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #16181c;
-            border-bottom: 2px solid #374151;
-            position: fixed;
-            width: calc(100% - 604px);
-            z-index: 10;
-            transition: width 0.3s ease;
-        }
-
-        .main-content.comments-active .top-bar {
-            width: calc(100% - 4rem);
-        }
 
         .post-card {
             background-color: #16181c;
-            border-radius: 0.5rem;
-            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
             max-width: 830px;
             margin: 0;
             width: 100%;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            border: 1px solid rgba(55, 65, 81, 0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-card:hover {
+            background-color: #1a1d23;
+            transform: translateY(-1px);
         }
 
         .post-header {
@@ -398,11 +413,13 @@
             background-color: #1f2937;
             border-radius: 0.5rem;
             transition: all 0.2s;
+            border: 1px solid rgba(55, 65, 81, 0.2);
         }
 
         .action:hover {
             color: white;
-            background-color: #374151;
+            background-color: #252f3f;
+            transform: translateY(-1px);
         }
 
         .action.liked {
@@ -563,125 +580,50 @@
             margin-bottom: 0.5rem;
             margin-left: 3.25rem;
             margin-top: -0.25rem;
-            line-height: 1.3;
+            line-height: 1.125;
             position: relative;
             font-size: 1.125rem;
             padding-right: 1rem;
         }
 
-        .post-card-actions {
-            margin-top: 0.5rem;
-            margin-left: 3.25rem;
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-start;
-        }
-
         .comments-panel {
+            display: none;
+        }
+
+        .filter-button {
             position: fixed;
-            right: 0;
-            top: 0;
-            width: 600px;
-            height: 100vh;
-            background-color: #16181c;
-            border-left: 1px solid #374151;
-            border-right: 1px solid #374151;
-            z-index: 20;
-            transform: none;
-            transition: transform 0.3s ease, right 0.3s ease;
-        }
-
-        .comments-panel.active {
-            transform: translateX(-725px);
-        }
-
-        .comments-header {
-            height: 3rem;
+            top: 5rem;
+            right: calc(50% - 370px);
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
             display: flex;
             align-items: center;
-            padding: 0 1rem;
-            border-bottom: 2px solid #374151;
-            background-color: #16181c;
-        }
-
-        .comments-header h2 {
-            font-weight: 600;
-            color: white;
-            letter-spacing: 0.05em;
-            font-size: 1.25rem;
-        }
-
-        .comments-container {
-            padding: 1rem;
-            height: calc(100vh - 3rem);
-            overflow-y: auto;
-        }
-
-        .comment-card {
-            background-color: #1f2937;
-            border-radius: 0.5rem;
-            padding: 0.75rem 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .comment-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .comment-content {
-            margin-left: 3.25rem;
-            line-height: 1.3;
-            font-size: 1rem;
-        }
-
-        .comment-input-container {
-            padding: 1rem;
-            border-bottom: 1px solid #374151;
-            background-color: #16181c;
-        }
-
-        .comment-input {
-            width: 100%;
-            min-height: 80px;
-            background-color: #1f2937;
-            border: 2px solid #374151;
-            border-radius: 0.5rem;
-            color: white;
-            font-size: 1rem;
-            padding: 0.75rem;
-            resize: none;
-            outline: none;
-            font-family: inherit;
-            margin-bottom: 0.75rem;
-        }
-
-        .comment-input:focus {
-            border-color: #4b5563;
-        }
-
-        .comment-submit-button {
-            padding: 0.5rem 1rem;
-            background-color: #374151;
-            color: white;
-            border: none;
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            font-weight: 500;
+            justify-content: center;
             cursor: pointer;
-            transition: background-color 0.2s;
+            z-index: 9;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .comment-submit-button:hover {
-            background-color: #4b5563;
+        .filter-button:hover {
+            background-color: #252f3f;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
-        .comments-container {
-            padding: 1rem;
-            height: calc(100vh - 8rem);
-            overflow-y: auto;
+        .filter-button svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: #e5e7eb;
+        }
+
+        @media (max-width: 1200px) {
+            .filter-button {
+                right: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -784,9 +726,7 @@
             </nav>
 
             <div class="feeds-container">
-                <main class="feed" id="feed1">
-                </main>
-                <main class="feed" id="feed2">
+                <main class="feed" id="feed">
                 </main>
             </div>
         </div>
@@ -802,6 +742,12 @@
             </div>
             <div class="comments-container">
             </div>
+        </div>
+
+        <div class="filter-button">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
         </div>
     </div>
 
@@ -918,6 +864,178 @@
                         timestamp: "45m"
                     }
                 ]
+            },
+            {
+                id: 5,
+                author: "Eva",
+                username: "eva",
+                avatarUrl: "https://i.pravatar.cc/150?u=Eva",
+                content: "Just finished reading an amazing book about AI and the future of humanity. Highly recommend!",
+                timestamp: "15m",
+                likes: 12,
+                liked: false,
+                comments: 3,
+                reposts: 5,
+                commentsList: [
+                    {
+                        id: 8,
+                        author: "Frank",
+                        username: "frank",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Frank",
+                        content: "What's the title? I'm looking for a new read.",
+                        timestamp: "10m"
+                    },
+                    {
+                        id: 9,
+                        author: "Alice",
+                        username: "alice",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Alice",
+                        content: "Sounds interesting! Send me the details.",
+                        timestamp: "12m"
+                    }
+                ]
+            },
+            {
+                id: 6,
+                author: "Frank",
+                username: "frank",
+                avatarUrl: "https://i.pravatar.cc/150?u=Frank",
+                content: "Who else is attending the tech conference next month? Let's meet up!",
+                timestamp: "1h",
+                likes: 8,
+                liked: false,
+                comments: 6,
+                reposts: 2,
+                commentsList: [
+                    {
+                        id: 10,
+                        author: "George",
+                        username: "george",
+                        avatarUrl: "https://i.pravatar.cc/150?u=George",
+                        content: "I'll be there! Let's coordinate.",
+                        timestamp: "55m"
+                    }
+                ]
+            },
+            {
+                id: 7,
+                author: "George",
+                username: "george",
+                avatarUrl: "https://i.pravatar.cc/150?u=George",
+                content: "Just launched my new portfolio website. Check it out and let me know what you think!",
+                timestamp: "3h",
+                likes: 15,
+                liked: false,
+                comments: 8,
+                reposts: 4,
+                commentsList: [
+                    {
+                        id: 11,
+                        author: "Hannah",
+                        username: "hannah",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Hannah",
+                        content: "It looks fantastic! Love the design.",
+                        timestamp: "2h"
+                    },
+                    {
+                        id: 12,
+                        author: "Diana",
+                        username: "diana",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Diana",
+                        content: "Very professional. Great work!",
+                        timestamp: "2.5h"
+                    }
+                ]
+            },
+            {
+                id: 8,
+                author: "Hannah",
+                username: "hannah",
+                avatarUrl: "https://i.pravatar.cc/150?u=Hannah",
+                content: "Beautiful sunrise this morning! Starting the day with positive vibes.",
+                timestamp: "5h",
+                likes: 24,
+                liked: false,
+                comments: 3,
+                reposts: 7,
+                commentsList: [
+                    {
+                        id: 13,
+                        author: "Isaac",
+                        username: "isaac",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Isaac",
+                        content: "Looks amazing! Where was this taken?",
+                        timestamp: "4h"
+                    }
+                ]
+            },
+            {
+                id: 9,
+                author: "Isaac",
+                username: "isaac",
+                avatarUrl: "https://i.pravatar.cc/150?u=Isaac",
+                content: "Just solved a complex algorithm problem that's been bothering me for days. The solution was simpler than I thought!",
+                timestamp: "7h",
+                likes: 19,
+                liked: false,
+                comments: 5,
+                reposts: 3,
+                commentsList: [
+                    {
+                        id: 14,
+                        author: "Charlie",
+                        username: "charlie",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Charlie",
+                        content: "Care to share? I'm curious about the approach you took.",
+                        timestamp: "6h"
+                    },
+                    {
+                        id: 15,
+                        author: "George",
+                        username: "george",
+                        avatarUrl: "https://i.pravatar.cc/150?u=George",
+                        content: "That's often how it goes. Congrats!",
+                        timestamp: "5h"
+                    }
+                ]
+            },
+            {
+                id: 10,
+                author: "Julia",
+                username: "julia",
+                avatarUrl: "https://i.pravatar.cc/150?u=Julia",
+                content: "Anyone have recommendations for good productivity apps? Looking to organize my workflow better.",
+                timestamp: "8h",
+                likes: 7,
+                liked: false,
+                comments: 9,
+                reposts: 1,
+                commentsList: [
+                    {
+                        id: 16,
+                        author: "Bob",
+                        username: "bob",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Bob",
+                        content: "I've been using Notion and it's changed my life.",
+                        timestamp: "7h"
+                    },
+                    {
+                        id: 17,
+                        author: "Eva",
+                        username: "eva",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Eva",
+                        content: "Try Todoist for task management. It's simple but powerful.",
+                        timestamp: "6h"
+                    },
+                    {
+                        id: 18,
+                        author: "Alice",
+                        username: "alice",
+                        avatarUrl: "https://i.pravatar.cc/150?u=Alice",
+                        content: "I'm a fan of TickTick. Great for both work and personal tasks.",
+                        timestamp: "5h"
+                    }
+                ]
             }
         ];
 
@@ -999,83 +1117,7 @@
         }
 
         function showComments(post, isFromFirstColumn) {
-            const mainContent = document.getElementById('mainContent');
-            const feedsContainer = document.querySelector('.feeds-container');
-            const rightSidebar = document.querySelector('.right-sidebar');
-            const rightSidebarContent = document.querySelector('.right-sidebar-content');
-            const commentsPanel = document.querySelector('.comments-panel');
-            const panelCommentsContainer = commentsPanel.querySelector('.comments-container');
-            
-            panelCommentsContainer.innerHTML = '';
-            rightSidebarContent.innerHTML = '';
-            
-            const commentsHeader = document.querySelector('.comments-header h2');
-            const secondFeed = document.querySelector('#feed2');
-            const firstFeed = document.querySelector('#feed1');
-
-            commentsHeader.textContent = `Comments on ${post.author}'s post`;
-
-            commentsPanel.dataset.currentPostId = post.id;
-            rightSidebarContent.dataset.currentPostId = post.id;
-
-            if (isFromFirstColumn) {
-                rightSidebar.style.display = 'none';
-                rightSidebar.style.opacity = '0';
-                rightSidebar.style.visibility = 'hidden';
-                mainContent.classList.add('comments-active');
-                feedsContainer.classList.add('comments-active');
-                secondFeed.classList.add('comments-active');
-                firstFeed.classList.add('comments-active');
-                commentsPanel.classList.add('active');
-                
-                panelCommentsContainer.innerHTML = commentInputSection;
-                
-                if (post.commentsList && post.commentsList.length > 0) {
-                    post.commentsList.forEach(comment => {
-                        panelCommentsContainer.insertAdjacentHTML('beforeend', createCommentCard(comment));
-                    });
-                }
-                
-                const commentButton = panelCommentsContainer.querySelector('.comment-submit-button');
-                const commentInput = panelCommentsContainer.querySelector('.comment-input');
-                
-                if (commentButton && commentInput) {
-                    commentButton.addEventListener('click', () => {
-                        addComment(post, commentInput, isFromFirstColumn);
-                    });
-                }
-            } else {
-                rightSidebar.style.display = 'block';
-                rightSidebar.style.opacity = '1';
-                rightSidebar.style.visibility = 'visible';
-                mainContent.classList.remove('comments-active');
-                feedsContainer.classList.remove('comments-active');
-                secondFeed.classList.remove('comments-active');
-                firstFeed.classList.remove('comments-active');
-                commentsPanel.classList.remove('active');
-                
-                rightSidebarContent.insertAdjacentHTML('beforeend', commentInputSection);
-                
-                const sidebarCommentsContainer = document.createElement('div');
-                sidebarCommentsContainer.className = 'comments-container';
-                
-                if (post.commentsList && post.commentsList.length > 0) {
-                    post.commentsList.forEach(comment => {
-                        sidebarCommentsContainer.insertAdjacentHTML('beforeend', createCommentCard(comment));
-                    });
-                }
-                
-                rightSidebarContent.appendChild(sidebarCommentsContainer);
-                
-                const commentButton = rightSidebarContent.querySelector('.comment-submit-button');
-                const commentInput = rightSidebarContent.querySelector('.comment-input');
-                
-                if (commentButton && commentInput) {
-                    commentButton.addEventListener('click', () => {
-                        addComment(post, commentInput, isFromFirstColumn);
-                    });
-                }
-            }
+            console.log(`Comments requested for post #${post.id}`);
         }
         
         function addComment(post, commentInput, isFromFirstColumn) {
@@ -1111,6 +1153,31 @@
                 });
             }
         }
+        function setActiveNavIcon(activeIcon) {
+            document.querySelectorAll('.nav-icons .nav-icon').forEach(icon => {
+            icon.classList.remove('active');
+            });
+            activeIcon.classList.add('active');
+        }
+
+        function hideSearchPanel() {
+            if (isSearchActive) {
+            isSearchActive = false;
+            searchPanel.classList.remove('active');
+            mainContent.classList.remove('search-active');
+            setActiveNavIcon(homeButton);
+            }
+        }
+
+        function hidePostPanel() {
+            if (isCreatePostActive) {
+            isCreatePostActive = false;
+            createPostPanel.classList.remove('active');
+            mainContent.classList.remove('create-post-active');
+            postTextarea.value = '';
+            setActiveNavIcon(homeButton);
+            }
+        }
 
         const searchButton = document.getElementById('searchButton');
         const searchPanel = document.getElementById('searchPanel');
@@ -1122,16 +1189,45 @@
         const searchPlaceholder = document.getElementById('searchPlaceholder');
         let isSearchActive = false;
 
+        const homeButton = document.querySelector('.nav-icons .nav-icon:nth-child(1)');
+        const createPostButton = document.querySelector('.nav-icons .nav-icon:nth-child(3)');
+        const likesButton = document.querySelector('.nav-icons .nav-icon:nth-child(4)');
+        const profileButton = document.querySelector('.nav-icons .nav-icon:nth-child(5)');
+        
+        homeButton.addEventListener('click', () => {
+            setActiveNavIcon(homeButton);
+            document.getElementById('feed').scrollTop = 0;
+        });
+
         searchButton.addEventListener('click', () => {
+            setActiveNavIcon(searchButton);
             isSearchActive = !isSearchActive;
             searchPanel.classList.toggle('active');
             mainContent.classList.toggle('search-active');
-            
             if (isSearchActive) {
-                searchInput.focus();
+            searchInput.focus();
             }
         });
 
+        createPostButton.addEventListener('click', () => {
+            setActiveNavIcon(createPostButton);
+            isCreatePostActive = !isCreatePostActive;
+            createPostPanel.classList.toggle('active');
+            mainContent.classList.toggle('create-post-active');
+            if (isCreatePostActive) {
+            postTextarea.focus();
+            } else {
+            postTextarea.value = '';
+            }
+        });
+
+        likesButton.addEventListener('click', () => {
+            setActiveNavIcon(likesButton);
+        });
+
+        profileButton.addEventListener('click', () => {
+            setActiveNavIcon(profileButton);
+        });
         searchInput.addEventListener('input', (e) => {
             const value = e.target.value;
             searchText.textContent = value;
@@ -1190,45 +1286,32 @@
             if (isSearchActive && 
                 !searchPanel.contains(e.target) && 
                 !searchButton.contains(e.target)) {
-                isSearchActive = false;
-                searchPanel.classList.remove('active');
-                mainContent.classList.remove('search-active');
+                hideSearchPanel();
+            }
+
+            if (isCreatePostActive && 
+                !createPostPanel.contains(e.target) && 
+                !createPostButton.contains(e.target)) {
+                hidePostPanel();
+            }
+            
+            const clickedOnMainContent = mainContent.contains(e.target);
+            const clickedOnNavIcon = e.target.closest('.nav-icon');
+            const clickedOnPanel = searchPanel.contains(e.target) || createPostPanel.contains(e.target);
+            
+            if (clickedOnMainContent && !clickedOnNavIcon && !clickedOnPanel) {
+                setActiveNavIcon(homeButton);
             }
         });
 
-        searchPanel.addEventListener('click', (e) => {
-            if (!isSearchActive) {
-                isSearchActive = true;
-                searchPanel.classList.add('active');
-                mainContent.classList.add('search-active');
-                searchInput.focus();
-            }
-        });
-
-        const createPostButton = document.querySelector('.nav-icon:nth-child(3)');
         const createPostPanel = document.getElementById('createPostPanel');
         const postTextarea = document.getElementById('postTextarea');
         const cancelPostButton = document.getElementById('cancelPost');
         const submitPostButton = document.getElementById('submitPost');
         let isCreatePostActive = false;
 
-        createPostButton.addEventListener('click', () => {
-            isCreatePostActive = !isCreatePostActive;
-            createPostPanel.classList.toggle('active');
-            mainContent.classList.toggle('create-post-active');
-            
-            if (isCreatePostActive) {
-                postTextarea.focus();
-            } else {
-                postTextarea.value = '';
-            }
-        });
-
         cancelPostButton.addEventListener('click', () => {
-            isCreatePostActive = false;
-            createPostPanel.classList.remove('active');
-            mainContent.classList.remove('create-post-active');
-            postTextarea.value = '';
+            hidePostPanel();
         });
 
         submitPostButton.addEventListener('click', () => {
@@ -1255,44 +1338,8 @@
                     feed.innerHTML += createPostCard(post);
                 });
 
-                isCreatePostActive = false;
-                createPostPanel.classList.remove('active');
-                mainContent.classList.remove('create-post-active');
-                postTextarea.value = '';
+                hidePostPanel();
             }
-        });
-
-        document.addEventListener('click', (e) => {
-            if (isCreatePostActive && 
-                !createPostPanel.contains(e.target) && 
-                !createPostButton.contains(e.target)) {
-                isCreatePostActive = false;
-                createPostPanel.classList.remove('active');
-                mainContent.classList.remove('create-post-active');
-                postTextarea.value = '';
-            }
-        });
-
-        const feed1 = document.getElementById('feed1');
-        const feed2 = document.getElementById('feed2');
-        
-        posts.forEach((post, index) => {
-            if (index % 2 === 0) {
-                feed1.innerHTML += createPostCard(post);
-            } else {
-                feed2.innerHTML += createPostCard(post);
-            }
-        });
-
-        const imageButton = document.getElementById('imageButton');
-        const emojiButton = document.getElementById('emojiButton');
-        const scheduleButton = document.getElementById('scheduleButton');
-        const pollButton = document.getElementById('pollButton');
-
-        [imageButton, emojiButton, scheduleButton, pollButton].forEach(button => {
-            button.addEventListener('click', () => {
-                button.classList.toggle('active');
-            });
         });
 
         document.addEventListener('click', (e) => {
@@ -1304,18 +1351,12 @@
                     post.liked = !post.liked;
                     post.likes += post.liked ? 1 : -1;
                     
-                    const feed1 = document.getElementById('feed1');
-                    const feed2 = document.getElementById('feed2');
+                    const feed = document.getElementById('feed');
                     
-                    feed1.innerHTML = '';
-                    feed2.innerHTML = '';
+                    feed.innerHTML = '';
                     
-                    posts.forEach((post, index) => {
-                        if (index % 2 === 0) {
-                            feed1.innerHTML += createPostCard(post);
-                        } else {
-                            feed2.innerHTML += createPostCard(post);
-                        }
+                    posts.forEach((post) => {
+                        feed.innerHTML += createPostCard(post);
                     });
                     
                     const searchResults = document.getElementById('searchResults');
@@ -1343,16 +1384,33 @@
                     if (likeButton) {
                         const postId = parseInt(likeButton.dataset.postId);
                         const post = posts.find(p => p.id === postId);
-                        
-                        const feed1 = document.getElementById('feed1');
-                        const isFromFirstColumn = feed1.contains(postCard);
-                        
                         if (post) {
-                            showComments(post, isFromFirstColumn);
+                            if (commentButton.querySelector('svg path').getAttribute('d').includes('M8 12h.01')) {
+                                showComments(post, true);
+                            } else {
+                                console.log(`Repost clicked for post #${post.id}`);
+                            }
                         }
                     }
                 }
             }
+        });
+
+        const feed = document.getElementById('feed');
+        
+        posts.forEach((post) => {
+            feed.innerHTML += createPostCard(post);
+        });
+
+        const imageButton = document.getElementById('imageButton');
+        const emojiButton = document.getElementById('emojiButton');
+        const scheduleButton = document.getElementById('scheduleButton');
+        const pollButton = document.getElementById('pollButton');
+
+        [imageButton, emojiButton, scheduleButton, pollButton].forEach(button => {
+            button.addEventListener('click', () => {
+                button.classList.toggle('active');
+            });
         });
     </script>
 </body>
