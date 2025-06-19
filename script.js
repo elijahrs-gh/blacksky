@@ -1,4 +1,59 @@
-const posts = [
+        const users = {
+            "alice": { 
+                followers: 125, 
+                following: 89,
+                bio: "Welcome to my corner of Blacksky! Love connecting with new people and sharing thoughts on tech and life. 🌟"
+            },
+            "bob": { 
+                followers: 67, 
+                following: 134,
+                bio: "Software developer by day, philosopher by night. Always curious about the intersection of technology and humanity."
+            },
+            "charlie": { 
+                followers: 89, 
+                following: 76,
+                bio: "Just discovered this amazing platform! Excited to learn and grow with this community. Let's connect! 🚀"
+            },
+            "diana": { 
+                followers: 203, 
+                following: 145,
+                bio: "Product manager working on exciting new features. Love building things that make people's lives better. ✨"
+            },
+            "eva": { 
+                followers: 156, 
+                following: 92,
+                bio: "Bookworm, AI enthusiast, and lifelong learner. Always happy to discuss the latest reads and tech trends."
+            },
+            "frank": { 
+                followers: 78, 
+                following: 115,
+                bio: "Tech conference organizer and networking enthusiast. Let's meet up and build amazing things together!"
+            },
+            "george": { 
+                followers: 134, 
+                following: 87,
+                bio: "Web developer and designer. Check out my portfolio and let me know what you think! Always open to feedback."
+            },
+            "hannah": { 
+                followers: 189, 
+                following: 123,
+                bio: "Morning person who loves sharing positive vibes and beautiful moments. Spreading sunshine one post at a time! ☀️"
+            },
+            "isaac": { 
+                followers: 98, 
+                following: 156,
+                bio: "Algorithm lover and problem solver. There's always an elegant solution waiting to be discovered. 💡"
+            },
+            "julia": { 
+                followers: 167, 
+                following: 203,
+                bio: "Productivity enthusiast always looking for better ways to organize life and work. Happy to share tips and tricks!"
+            }
+        };
+
+        let currentUserFollowing = new Set(['alice', 'charlie']);
+
+        const posts = [
             {
                 id: 1,
                 author: "Alice",
@@ -294,6 +349,51 @@ const posts = [
                 ]
             }
         ];
+        const userReplies = [
+            {
+                id: 101,
+                author: "Alice",
+                username: "alice",
+                avatarUrl: "https://i.pravatar.cc/150?u=Alice",
+                content: "Thanks for sharing this! Really insightful.",
+                timestamp: "3h",
+                likes: 5,
+                liked: false,
+                replyTo: {
+                    author: "Eva",
+                    content: "Just finished reading an amazing book about AI..."
+                }
+            },
+            {
+                id: 102,
+                author: "Bob", 
+                username: "bob",
+                avatarUrl: "https://i.pravatar.cc/150?u=Bob",
+                content: "I completely agree with your perspective on this.",
+                timestamp: "2h",
+                likes: 3,
+                liked: false,
+                replyTo: {
+                    author: "Diana",
+                    content: "Working on some exciting new features..."
+                }
+            },
+            {
+                id: 103,
+                author: "Charlie",
+                username: "charlie", 
+                avatarUrl: "https://i.pravatar.cc/150?u=Charlie",
+                content: "This is exactly what I needed to hear today!",
+                timestamp: "4h",
+                likes: 8,
+                liked: false,
+                replyTo: {
+                    author: "Hannah",
+                    content: "Beautiful sunrise this morning!"
+                }
+            }
+        ];
+
         function createPostCard(post) {
             const tagsHTML = post.tags && post.tags.length > 0 
                 ? post.tags.map(tag => `<span class="post-tag-inline">#${tag}</span>`).join('') 
@@ -456,6 +556,8 @@ const posts = [
         
         homeButton.addEventListener('click', () => {
             setActiveNavIcon(homeButton);
+            hideUserProfile();
+            updateTopBarTitle('Home');
             document.getElementById('feed').scrollTop = 0;
         });
 
@@ -487,6 +589,8 @@ const posts = [
 
         profileButton.addEventListener('click', () => {
             setActiveNavIcon(profileButton);
+            showUserProfile('you');
+            updateTopBarTitle('Profile');
         });
         searchInput.addEventListener('input', (e) => {
             const value = e.target.value;
@@ -599,6 +703,36 @@ const posts = [
                 });
 
                 hidePostPanel();
+            }
+        });
+
+        posts.unshift({
+            id: 999,
+            author: "You",
+            username: "you", 
+            avatarUrl: "https://i.pravatar.cc/150?u=You",
+            content: "Just set up my Blacksky profile! Excited to connect with everyone.",
+            timestamp: "30m",
+            likes: 8,
+            liked: false,
+            comments: 3,
+            reposts: 1,
+            tags: ["intro", "blacksky", "hello"],
+            commentsList: []
+        });
+
+        userReplies.unshift({
+            id: 199,
+            author: "You",
+            username: "you",
+            avatarUrl: "https://i.pravatar.cc/150?u=You", 
+            content: "This is really helpful, thanks for sharing!",
+            timestamp: "1h",
+            likes: 4,
+            liked: false,
+            replyTo: {
+                author: "Julia",
+                content: "Anyone have recommendations for good productivity apps?"
             }
         });
 
@@ -836,3 +970,244 @@ const posts = [
         filterPopup.addEventListener('click', (e) => {
             e.stopPropagation();
         });
+        
+        // Profile page functionality
+        const profilePage = document.getElementById('profilePage');
+        const profileBackButton = document.getElementById('profileBackButton');
+        const profileAvatar = document.getElementById('profileAvatar');
+        const profileName = document.getElementById('profileName');
+        const profileUsername = document.getElementById('profileUsername');
+        const profileBio = document.getElementById('profileBio');
+        const profilePostCount = document.getElementById('profilePostCount');
+        const profileFollowersCount = document.getElementById('profileFollowersCount');
+        const profileFollowingCount = document.getElementById('profileFollowingCount');
+        const profileLikeCount = document.getElementById('profileLikeCount');
+        const profilePostsList = document.getElementById('profilePostsList');
+        const profileRepliesList = document.getElementById('profileRepliesList');
+        const followButton = document.getElementById('followButton');
+        const followButtonText = document.getElementById('followButtonText');
+        const postsTab = document.getElementById('postsTab');
+        const repliesTab = document.getElementById('repliesTab');
+        
+        let currentProfileUser = null;
+        
+        function showUserProfile(username) {
+            const userPosts = posts.filter(post => post.username === username);
+            const user = userPosts.length > 0 ? userPosts[0] : null;
+            
+            if (!user) return;
+            
+            currentProfileUser = username;
+            
+            const totalLikes = userPosts.reduce((sum, post) => sum + post.likes, 0);
+            
+            const userData = users[username] || { followers: 0, following: 0 };
+            
+            profileAvatar.src = user.avatarUrl;
+            profileAvatar.alt = user.author;
+            profileName.textContent = user.author;
+            profileUsername.textContent = `@${user.username}`;
+            profileBio.textContent = userData.bio || 'No bio available.';
+            profilePostCount.textContent = userPosts.length;
+            profileFollowersCount.textContent = userData.followers;
+            profileFollowingCount.textContent = userData.following;
+            profileLikeCount.textContent = totalLikes;
+            
+            if (username === 'you') {
+                followButton.style.display = 'none';
+            } else {
+                followButton.style.display = 'block';
+                updateFollowButton(username);
+            }
+            
+            profilePostsList.innerHTML = '';
+            if (userPosts.length > 0) {
+                userPosts.forEach(post => {
+                    profilePostsList.innerHTML += createPostCard(post);
+                });
+            } else {
+                profilePostsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <div>No posts yet</div>
+                    </div>
+                `;
+            }
+            
+            const userRepliesList = userReplies.filter(reply => reply.username === username);
+            profileRepliesList.innerHTML = '';
+            if (userRepliesList.length > 0) {
+                userRepliesList.forEach(reply => {
+                    profileRepliesList.innerHTML += createReplyCard(reply);
+                });
+            } else {
+                profileRepliesList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💬</div>
+                        <div>No replies yet</div>
+                    </div>
+                `;
+            }
+            
+            switchToTab('posts');
+            
+            profilePage.classList.add('active');
+            
+            attachLikeButtonListeners();
+        }
+        
+        function hideUserProfile() {
+            profilePage.classList.remove('active');
+            updateTopBarTitle('Home');
+            setActiveNavIcon(homeButton);
+        }
+        
+        profileBackButton.addEventListener('click', hideUserProfile);
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && profilePage.classList.contains('active')) {
+                hideUserProfile();
+            }
+        });
+        
+        document.addEventListener('click', (e) => {
+            const avatar = e.target.closest('.avatar');
+            if (avatar) {
+                const postCard = avatar.closest('.post-card');
+                if (postCard) {
+                    const usernameElement = postCard.querySelector('.username');
+                    if (usernameElement) {
+                        const usernameText = usernameElement.textContent;
+                        const match = usernameText.match(/@([a-zA-Z0-9_]+)/);
+                        if (match) {
+                            const username = match[1];
+                            showUserProfile(username);
+                            updateTopBarTitle('Profile');
+                            if (username === 'you') {
+                                setActiveNavIcon(profileButton);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        function updateFollowButton(username) {
+            const isFollowing = currentUserFollowing.has(username);
+            
+            if (isFollowing) {
+                followButton.classList.add('following');
+                followButtonText.textContent = 'Following';
+            } else {
+                followButton.classList.remove('following');
+                followButtonText.textContent = 'Follow';
+            }
+        }
+        
+        function toggleFollow(username) {
+            if (currentUserFollowing.has(username)) {
+                currentUserFollowing.delete(username);
+                users[username].followers--;
+            } else {
+                currentUserFollowing.add(username);
+                users[username].followers++;
+            }
+            
+            updateFollowButton(username);
+            profileFollowersCount.textContent = users[username].followers;
+        }
+        
+        followButton.addEventListener('click', () => {
+            if (currentProfileUser) {
+                toggleFollow(currentProfileUser);
+            }
+        });
+        function createReplyCard(reply) {
+            return `
+                <div class="post-card">
+                    <div class="reply-context">
+                        <div class="reply-context-text">Replying to @${reply.replyTo.author}</div>
+                        <div class="reply-context-content">${reply.replyTo.content}</div>
+                    </div>
+                    <div class="post-header">
+                        <div class="avatar">
+                            <img src="${reply.avatarUrl}" alt="${reply.author}">
+                        </div>
+                        <div class="post-info">
+                            <div class="author">
+                                ${reply.author}
+                                <span class="username">
+                                    @${reply.username}
+                                    <span class="dot-separator">·</span>
+                                    <span class="timestamp">${reply.timestamp}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        ${reply.content}
+                    </div>
+                    <div class="post-card-actions">
+                        <div class="action">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                            <span class="action-count">0</span>
+                        </div>
+                        <div class="action">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            <span class="action-count">0</span>
+                        </div>
+                        <div class="action like-button ${reply.liked ? 'liked' : ''}" data-post-id="${reply.id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="${reply.liked ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                            <span class="action-count">${reply.likes}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        function switchToTab(tabName) {
+            postsTab.classList.remove('active');
+            repliesTab.classList.remove('active');
+            profilePostsList.classList.remove('active');
+            profileRepliesList.classList.remove('active');
+            
+            if (tabName === 'posts') {
+                postsTab.classList.add('active');
+                profilePostsList.classList.add('active');
+            } else if (tabName === 'replies') {
+                repliesTab.classList.add('active');
+                profileRepliesList.classList.add('active');
+            }
+        }
+        
+        postsTab.addEventListener('click', () => {
+            switchToTab('posts');
+        });
+        
+        repliesTab.addEventListener('click', () => {
+            switchToTab('replies');
+        });
+        
+        function updateTopBarTitle(title) {
+            const topBarTitle = document.querySelector('.top-bar h1');
+            if (topBarTitle) {
+                topBarTitle.textContent = title;
+            }
+        }
+        
+        const currentUser = {
+            author: "You",
+            username: "you",
+            avatarUrl: "https://i.pravatar.cc/150?u=You"
+        };
+        
+        users["you"] = { 
+            followers: 42, 
+            following: 156,
+            bio: "New to Blacksky and loving the community! Excited to share thoughts and connect with amazing people. 🎉"
+        };

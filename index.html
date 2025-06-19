@@ -126,6 +126,61 @@
             <div class="filter-tags" id="filterTags">
             </div>
         </div>
+
+        <div class="profile-page" id="profilePage">
+            <div class="profile-back-nav">
+                <button class="profile-back-button" id="profileBackButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+            </div>
+            <div class="profile-content">
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <img id="profileAvatar" src="" alt="Profile Avatar">
+                    </div>
+                    <div class="profile-details">
+                        <h1 id="profileName" class="profile-name"></h1>
+                        <p id="profileUsername" class="profile-username"></p>
+                        <p id="profileBio" class="profile-bio"></p>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <span id="profilePostCount" class="stat-number">0</span>
+                                <span class="stat-label">Posts</span>
+                            </div>
+                            <div class="stat">
+                                <span id="profileFollowersCount" class="stat-number">0</span>
+                                <span class="stat-label">Followers</span>
+                            </div>
+                            <div class="stat">
+                                <span id="profileFollowingCount" class="stat-number">0</span>
+                                <span class="stat-label">Following</span>
+                            </div>
+                            <div class="stat">
+                                <span id="profileLikeCount" class="stat-number">0</span>
+                                <span class="stat-label">Likes</span>
+                            </div>
+                        </div>
+                        <button id="followButton" class="follow-button">
+                            <span id="followButtonText">Follow</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="profile-content-section">
+                    <div class="profile-tabs">
+                        <button class="profile-tab active" id="postsTab">Posts</button>
+                        <button class="profile-tab" id="repliesTab">Replies</button>
+                    </div>
+                    <div class="profile-tab-content">
+                        <div id="profilePostsList" class="profile-posts-list tab-content active">
+                        </div>
+                        <div id="profileRepliesList" class="profile-replies-list tab-content">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
